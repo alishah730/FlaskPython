@@ -13,7 +13,7 @@ app = Flask(__name__)
 # This is the path to the upload directory
 app.config['UPLOAD_FOLDER'] = 'uploads/'
 # These are the extension that we are accepting to be uploaded
-app.config['ALLOWED_EXTENSIONS'] = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+app.config['ALLOWED_EXTENSIONS'] = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif','JPG','PNG'])
 
 # For a given file, return whether it's an allowed type or not
 def allowed_file(filename):
@@ -33,14 +33,17 @@ def index():
 def upload():
     # Get the name of the uploaded files
     uploaded_files = request.files.getlist("file[]")
+    print("Uploaded file ", uploaded_files)
     filenames = []
     for file in uploaded_files:
         # Check if the file is one of the allowed types/extensions
+        print(file)
         if file and allowed_file(file.filename):
             # Make the filename safe, remove unsupported chars
             filename = secure_filename(file.filename)
             # Move the file form the temporal folder to the upload
             # folder we setup
+            #file.save("uploads/"+filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             # Save the filename into a list, we'll use it later
             filenames.append(filename)
